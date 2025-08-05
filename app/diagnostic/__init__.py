@@ -1,0 +1,1 @@
+# Inicjalizacja modułu app

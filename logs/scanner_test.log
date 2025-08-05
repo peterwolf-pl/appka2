@@ -1,0 +1,81 @@
+2025-08-05 12:18:30,009 | INFO     | __main__        | System logowania dla scanner_test.py skonfigurowany lokalnie.
+2025-08-05 12:18:30,010 | INFO     | __main__        | 
+--- Testowanie Modułu Scanner ---
+2025-08-05 12:18:30,028 | INFO     | app.db_manager  | MongoDB: Połączono z bazą 'moja_biblioteka_db'.
+2025-08-05 12:18:30,102 | INFO     | app.ocr_engine  | Tesseract: Zainicjalizowany (wersja: 5.5.0.20241111) z: C:\Program Files\Tesseract-OCR\tesseract.exe
+2025-08-05 12:18:30,102 | INFO     | __main__        | Scanner: Zainicjalizowany.
+2025-08-05 12:18:30,103 | INFO     | __main__        | 
+--- Przygotowanie testowych plików w scans/ i czyszczenie starych danych ---
+2025-08-05 12:18:30,104 | ERROR    | __main__        | Błąd podczas czyszczenia środowiska testowego: Collection objects do not implement truth value testing or bool(). Please compare with None instead: collection is not None
+2025-08-05 12:18:30,126 | ERROR    | __main__        | Błąd podczas tworzenia fikcyjnych plików testowych: name 'Image' is not defined
+2025-08-05 12:18:30,126 | WARNING  | __main__        | Kontynuuję testy skanera, ale bez fikcyjnych plików graficznych.
+2025-08-05 12:18:30,126 | INFO     | __main__        | 
+--- Rozpoczynam przetwarzanie skanów przez Scanner (wymaga interakcji w konsoli!) ---
+2025-08-05 12:18:30,126 | INFO     | __main__        | Scanner: Rozpoczynam przetwarzanie folderu skanów.
+2025-08-05 12:18:30,127 | INFO     | __main__        | Scanner: Brak nowych plików do przetworzenia w folderze scans/.
+2025-08-05 12:18:30,127 | INFO     | __main__        | 
+--- Przetwarzanie skanów przez Scanner zakończone ---
+2025-08-05 12:18:30,127 | INFO     | __main__        | 
+--- Weryfikacja końcowa danych w DB i na dysku ---
+2025-08-05 12:18:30,130 | ERROR    | __main__        | TEST SCANNER: Błąd - książka 'TestKsiazka' nie została znaleziona w DB po przetworzeniu.
+2025-08-05 12:18:30,131 | ERROR    | __main__        | TEST SCANNER: Błąd - książka 'InnaKsiazka' nie została znaleziona w DB po przetworzeniu.
+2025-08-05 12:18:30,131 | INFO     | __main__        | 
+--- Końcowe czyszczenie danych testowych ---
+2025-08-05 12:18:30,131 | ERROR    | __main__        | Błąd podczas końcowego czyszczenia: Collection objects do not implement truth value testing or bool(). Please compare with None instead: collection is not None
+2025-08-05 12:18:30,132 | INFO     | app.db_manager  | MongoDB: Połączenie zamknięte.
+2025-08-05 12:18:30,132 | INFO     | __main__        | 
+--- Testowanie Modułu Scanner zakończone ---
+2025-08-05 12:19:44,513 | INFO     | __main__        | System logowania dla scanner_test.py skonfigurowany lokalnie.
+2025-08-05 12:19:44,513 | INFO     | __main__        | 
+--- Testowanie Modułu Scanner ---
+2025-08-05 12:19:44,540 | INFO     | app.db_manager  | MongoDB: Połączono z bazą 'moja_biblioteka_db'.
+2025-08-05 12:19:44,554 | INFO     | app.ocr_engine  | Tesseract: Zainicjalizowany (wersja: 5.5.0.20241111) z: C:\Program Files\Tesseract-OCR\tesseract.exe
+2025-08-05 12:19:44,554 | INFO     | __main__        | Scanner: Zainicjalizowany.
+2025-08-05 12:19:44,554 | INFO     | __main__        | 
+--- Przygotowanie testowych plików w scans/ i czyszczenie starych danych ---
+2025-08-05 12:19:44,555 | ERROR    | __main__        | Błąd podczas czyszczenia środowiska testowego: Collection objects do not implement truth value testing or bool(). Please compare with None instead: collection is not None
+2025-08-05 12:19:44,558 | ERROR    | __main__        | Błąd podczas tworzenia fikcyjnych plików testowych: name 'Image' is not defined
+2025-08-05 12:19:44,558 | WARNING  | __main__        | Kontynuuję testy skanera, ale bez fikcyjnych plików graficznych.
+2025-08-05 12:19:44,558 | INFO     | __main__        | 
+--- Rozpoczynam przetwarzanie skanów przez Scanner (wymaga interakcji w konsoli!) ---
+2025-08-05 12:19:44,558 | INFO     | __main__        | Scanner: Rozpoczynam przetwarzanie folderu skanów.
+2025-08-05 12:19:44,560 | INFO     | __main__        | Scanner: Brak nowych plików do przetworzenia w folderze scans/.
+2025-08-05 12:19:44,560 | INFO     | __main__        | 
+--- Przetwarzanie skanów przez Scanner zakończone ---
+2025-08-05 12:19:44,560 | INFO     | __main__        | 
+--- Weryfikacja końcowa danych w DB i na dysku ---
+2025-08-05 12:19:44,561 | ERROR    | __main__        | TEST SCANNER: Błąd - książka 'TestKsiazka' nie została znaleziona w DB po przetworzeniu.
+2025-08-05 12:19:44,562 | ERROR    | __main__        | TEST SCANNER: Błąd - książka 'InnaKsiazka' nie została znaleziona w DB po przetworzeniu.
+2025-08-05 12:19:44,562 | INFO     | __main__        | 
+--- Końcowe czyszczenie danych testowych ---
+2025-08-05 12:19:44,563 | ERROR    | __main__        | Błąd podczas końcowego czyszczenia: Collection objects do not implement truth value testing or bool(). Please compare with None instead: collection is not None
+2025-08-05 12:19:44,563 | INFO     | app.db_manager  | MongoDB: Połączenie zamknięte.
+2025-08-05 12:19:44,563 | INFO     | __main__        | 
+--- Testowanie Modułu Scanner zakończone ---
+2025-08-05 12:20:58,097 | INFO     | __main__        | System logowania dla scanner_test.py skonfigurowany lokalnie.
+2025-08-05 12:20:58,097 | INFO     | __main__        | 
+--- Testowanie Modułu Scanner ---
+2025-08-05 12:20:58,123 | INFO     | app.db_manager  | MongoDB: Połączono z bazą 'moja_biblioteka_db'.
+2025-08-05 12:20:58,136 | INFO     | app.ocr_engine  | Tesseract: Zainicjalizowany (wersja: 5.5.0.20241111) z: C:\Program Files\Tesseract-OCR\tesseract.exe
+2025-08-05 12:20:58,137 | INFO     | __main__        | Scanner: Zainicjalizowany.
+2025-08-05 12:20:58,138 | INFO     | __main__        | 
+--- Przygotowanie testowych plików w scans/ i czyszczenie starych danych ---
+2025-08-05 12:20:58,138 | ERROR    | __main__        | Błąd podczas czyszczenia środowiska testowego: Collection objects do not implement truth value testing or bool(). Please compare with None instead: collection is not None
+2025-08-05 12:20:58,141 | ERROR    | __main__        | Błąd podczas tworzenia fikcyjnych plików testowych: name 'Image' is not defined
+2025-08-05 12:20:58,141 | WARNING  | __main__        | Kontynuuję testy skanera, ale bez fikcyjnych plików graficznych.
+2025-08-05 12:20:58,141 | INFO     | __main__        | 
+--- Rozpoczynam przetwarzanie skanów przez Scanner (wymaga interakcji w konsoli!) ---
+2025-08-05 12:20:58,141 | INFO     | __main__        | Scanner: Rozpoczynam przetwarzanie folderu skanów.
+2025-08-05 12:20:58,142 | INFO     | __main__        | Scanner: Brak nowych plików do przetworzenia w folderze scans/.
+2025-08-05 12:20:58,142 | INFO     | __main__        | 
+--- Przetwarzanie skanów przez Scanner zakończone ---
+2025-08-05 12:20:58,142 | INFO     | __main__        | 
+--- Weryfikacja końcowa danych w DB i na dysku ---
+2025-08-05 12:20:58,143 | ERROR    | __main__        | TEST SCANNER: Błąd - książka 'TestKsiazka' nie została znaleziona w DB po przetworzeniu.
+2025-08-05 12:20:58,144 | ERROR    | __main__        | TEST SCANNER: Błąd - książka 'InnaKsiazka' nie została znaleziona w DB po przetworzeniu.
+2025-08-05 12:20:58,144 | INFO     | __main__        | 
+--- Końcowe czyszczenie danych testowych ---
+2025-08-05 12:20:58,144 | ERROR    | __main__        | Błąd podczas końcowego czyszczenia: Collection objects do not implement truth value testing or bool(). Please compare with None instead: collection is not None
+2025-08-05 12:20:58,145 | INFO     | app.db_manager  | MongoDB: Połączenie zamknięte.
+2025-08-05 12:20:58,145 | INFO     | __main__        | 
+--- Testowanie Modułu Scanner zakończone ---

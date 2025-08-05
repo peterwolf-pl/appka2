@@ -1,0 +1,58 @@
+| | | |/ | | | | |
+| || | | __ ___ | | ___ _ __ _ __ ___ ___ __ | | ___ _ __ ___
+| __ | | | / _ \ | | |/ _ | '| '_ _ / / _ | / _ | '/ |
+| | | | || () || | | () | | | | | | | \ (| (| | || () | | _
+|| |||()|/ | | ||,|/|| |__/ AI Engineers of LMArena & Bartek Smoczynski
+
+
+
+
+# OCR i przetwarzanie obrazu
+pytesseract==0.3.10                 # Interfejs do Tesseract OCR
+Pillow==10.0.1                      # Praca z obrazami rasterowymi (JPG, PNG)
+
+                                    # Warstwa danych i bazy NoSQL
+pymongo==4.5.0                      # Klient MongoDB (insert, fetch, update)
+
+                                     Nasłuchiwanie systemu plików (dla skanów)
+watchdog==3.0.0                     # Monitorowanie folderów (np. scans/)
+
+# Analiza tekstu / warstwy NER / daty / obiekty
+spacy==3.7.2                        # NLP framework (Potrzebny model językowy PL)
+dateparser==1.2.0                   # Ekstrakcja dat z tekstu naturalnego
+regex==2023.10.3                    # Zaawansowane wyrażenia regularne
+
+# NLP rozszerzalne (opcjonalnie future-proofing)
+nltk==3.8.1                         # Natural Language Toolkit (do analizy osób/miejsc)
+
+————————————————————————————————————————————————————————————————————————————————————————————
+# Uwaga nt. modelu językowego (spacy)
+# Do poprawnego działania spaCy z językiem polskim
+# zainstaluj model:
+# https://github.com/explosion/spacy-models/releases/download/pl_core_news_sm-3.7.0/pl_core_news_sm-3.7.0-py3-none-any.whl
+# lub
+# python -m spacy download pl_core_news_sm
+--——————————————————————————————————————————————————
+
+# Model PL spaCy (można zaciągnąć przez pip, jeśli lokalnie)
+pl-core-news-sm @ https://github.com/explosion/spacy-models/releases/download/pl_core_news_sm-3.7.0/pl_core_news_sm-3.7.0-py3-none-any.whl
+
+
+|||||||||||()|/ | | ||||||| ||||||| \|\(/)
+-——————————————————————————————————————————————————————————————————————————————————————————————————
+#  Wbudowane      (nie wymagają instalacji przez pip):
+#  logging      – standardowy moduł logów
+#  tkinter      – standard w dystrybucji Pythona (dla GUI)
+
+#   Instalacja:
+#   python -m venv venv
+#   source venv/bin/activate  (lub venv\Scripts\activate na Windows)
+#   pip install -r requirements.txt
+
+⎹ ⎹⎹┋┃▕ ▏║││││││
+▕▔▔▔▔▔▔▏▔▔▔▔▔▔▔▔▔▏
+OCR · Mongo · NLP · Semiotics Layer — v0.4
+
+
+
+
