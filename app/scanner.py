@@ -261,22 +261,21 @@ class Scanner:
 # ----------------------------------------------------------
 if __name__ == "__main__":
     import sys
-    # Upewniamy się, że logowanie jest skonfigurowane dla testów
+
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s | %(levelname)-8s | %(name)-15s | %(message)s",
         handlers=[
-            logging.FileHandler(config.LOGS_DIR / "scanner_test.log", encoding="utf-8"),
+            logging.FileHandler(config.LOGS_DIR / "scanner.log", encoding="utf-8"),
             logging.StreamHandler(sys.stdout)
         ]
     )
     logger = logging.getLogger(__name__)
     change_logger = logging.getLogger("changes")
-    logger.info("System logowania dla scanner_test.py skonfigurowany lokalnie.")
+    logger.info("System logowania dla scanner.py skonfigurowany lokalnie.")
 
-    logger.info("\n--- Testowanie Modułu Scanner ---")
+    logger.info("\n--- Analiza folderu scans/ ---")
 
-    # Inicjalizacja zależności (DBManager, OCREngine)
     db_manager = DBManager()
     ocr_engine = OCREngine()
 
@@ -286,173 +285,26 @@ if __name__ == "__main__":
 
     if not ocr_engine.is_available():
         logger.warning("Tesseract jest niedostępny, OCR w testach Scanner zostanie pominięty.")
-        # Nie wychodzimy, bo reszta funkcji skanera może działać bez OCR
 
-    scanner = Scanner() # Inicjalizacja skanera (użyje DBManager i OCREngine)
+    scanner = Scanner()
 
-    # --- Przygotowanie środowiska testowego ---
-    logger.info("\n--- Przygotowanie testowych plików w scans/ i czyszczenie starych danych ---")
-    test_scan_dir = config.SCAN_DIR 
-    test_scan_dir.mkdir(exist_ok=True) 
-    test_processed_dir = config.PROCESSED_DIR
-    test_processed_dir.mkdir(exist_ok=True)
+    scan_dir = config.SCAN_DIR
+    scan_dir.mkdir(exist_ok=True)
 
-    # Generuj hashe testowe dla czyszczenia
-    # Muszą być zgodne z tym, co scanner wygeneruje
-    temp_test_book_meta_1 = {
-        "title": "TestKsiazka", # Tytuł z input()
-        "authors": "Testowy Autor",
-        "year": "2024",
-        "pub_place": "Testowo",
-        "publisher": "Testowe Wydawnictwo",
-        "num_pages": 100,
-        "language": "pol",
-        "notes": "Notatki.",
-        "keywords": ["test"],
-        "maps_present": False,
-        "illustrations_present": False,
-        "tables_present": False,
-    }
-    temp_test_book_hash_1 = utils.generate_book_hash(temp_test_book_meta_1)
-    
-    temp_test_book_meta_2 = {
-        "title": "InnaKsiazka", # Tytuł z input()
-        "authors": "Inny Autor",
-        "year": "2024",
-        "pub_place": "Inne Miasto",
-        "publisher": "Inne Wydawnictwo",
-        "num_pages": 50,
-        "language": "pol",
-        "notes": "Inne notatki.",
-        "keywords": ["test"],
-        "maps_present": False,
-        "illustrations_present": False,
-        "tables_present": False,
-    }
-    temp_test_book_hash_2 = utils.generate_book_hash(temp_test_book_meta_2)
-
-
-    # Czyszczenie starych danych z DB i processed/
     try:
-        if db_manager.books_collection:
-            db_manager.books_collection.delete_many({"book_hash": {"$in": [temp_test_book_hash_1, temp_test_book_hash_2]}})
-            logger.info("Usunięto stare książki testowe z DB.")
-        
-        for h in [temp_test_book_hash_1, temp_test_book_hash_2]:
-            folder = config.PROCESSED_DIR / h
-            if folder.exists():
-                shutil.rmtree(folder)
-                logger.info(f"Usunięto stary folder processed/: {folder}")
-        
-        for f in test_scan_dir.iterdir(): # Upewnij się, że scans/ jest czysty
-            if f.is_file():
-                f.unlink()
-                logger.info(f"Usunięto stary plik z scans/: {f.name}")
-                
+        files = [f for f in scan_dir.iterdir() if f.is_file()]
+        if files:
+            logger.info("Znalezione pliki w folderze scans/:")
+            for f in files:
+                logger.info(f"  - {f.name}")
+        else:
+            logger.info("Brak plików w folderze scans/ do analizy.")
     except Exception as e:
-        logger.error(f"Błąd podczas czyszczenia środowiska testowego: {e}")
-        # Kontynuujemy, bo to tylko testy
+        logger.error(f"Błąd podczas analizy plików w scans/: {e}")
 
-
-    # Tworzenie fikcyjnych plików skanów w scans/
-    # Używamy Pillow do tworzenia pustych PNG, aby symulować pliki graficzne
-    # (dla prawdziwego OCR, to musiałyby być obrazy z tekstem)
-    try:
-        from PIL import ImageDraw, ImageFont
-        test_image_names = [
-            "TestKsiazka_s0001.jpg",
-            "TestKsiazka_s0002.png",
-            "InnaKsiazka_w0001.tif",
-            "TestKsiazka_s0001.jpg", # Duplikat do testu nadpisywania
-            "ZlyFormat_x0001.xyz" # Nieprawidłowy format do testu ignorowania
-        ]
-        
-        for fname in test_image_names:
-            file_path = test_scan_dir / fname
-            if file_path.suffix.lower() in [".jpg", ".jpeg", ".png", ".tiff", ".tif"]:
-                img_width, img_height = 200, 100
-                test_img = Image.new("RGB", (img_width, img_height), color="white")
-                d = ImageDraw.Draw(test_img)
-                try:
-                    font = ImageFont.truetype("arial.ttf", 20)
-                except IOError:
-                    font = ImageFont.load_default()
-                d.text((10, 40), f"Test {fname}", fill=(0, 0, 0), font=font)
-                test_img.save(file_path)
-                logger.info(f"Utworzono fikcyjny plik skanu: {file_path.name}")
-            else:
-                # Utwórz plik o złym formacie (np. zip), aby sprawdzić obsługę błędów
-                with open(file_path, "w") as f:
-                    f.write("To jest plik o złym formacie.")
-                logger.info(f"Utworzono fikcyjny plik o złym formacie: {file_path.name}")
-
-    except Exception as e:
-        logger.error(f"Błąd podczas tworzenia fikcyjnych plików testowych: {e}")
-        logger.warning("Kontynuuję testy skanera, ale bez fikcyjnych plików graficznych.")
-
-
-    logger.info("\n--- Rozpoczynam przetwarzanie skanów przez Scanner (wymaga interakcji w konsoli!) ---")
+    logger.info("\n--- Rozpoczynam przetwarzanie skanów przez Scanner ---")
     scanner.process_scans_batch()
     logger.info("\n--- Przetwarzanie skanów przez Scanner zakończone ---")
 
-    # --- Weryfikacja po zakończeniu przetwarzania ---
-    logger.info("\n--- Weryfikacja końcowa danych w DB i na dysku ---")
-    
-    # Weryfikacja pierwszej książki testowej ('TestKsiazka')
-    final_book_1_data = db_manager.get_book_by_hash(temp_test_book_hash_1)
-    if final_book_1_data:
-        logger.info(f"Książka '{final_book_1_data.get('title')}' (hash: {temp_test_book_hash_1}) znaleziona w DB.")
-        if "scans" in final_book_1_data and len(final_book_1_data['scans']) >= 2: # Oczekujemy s0001 (nadpisany) i s0002
-            logger.info(f"  Liczba skanów dla '{final_book_1_data.get('title')}': {len(final_book_1_data['scans'])}")
-            s0001_path = config.PROCESSED_DIR / temp_test_book_hash_1 / f"{temp_test_book_hash_1}_s0001.jpg"
-            s0002_path = config.PROCESSED_DIR / temp_test_book_hash_1 / f"{temp_test_book_hash_1}_s0002.png"
-            if s0001_path.exists() and s0002_path.exists():
-                logger.info("  Pliki skanów w processed/ istnieją.")
-                logger.info("TEST SCANNER: Sukces - przetworzono wiele skanów i nadpisano duplikat dla TestKsiazka.")
-            else:
-                logger.error("TEST SCANNER: Błąd - brakuje przetworzonych plików w processed/ dla TestKsiazka.")
-        else:
-            logger.error("TEST SCANNER: Błąd - nie przetworzono wszystkich skanów lub nadpisywanie nie zadziałało dla TestKsiazka.")
-    else:
-        logger.error("TEST SCANNER: Błąd - książka 'TestKsiazka' nie została znaleziona w DB po przetworzeniu.")
-
-    # Weryfikacja drugiej książki testowej ('InnaKsiazka')
-    final_book_2_data = db_manager.get_book_by_hash(temp_test_book_hash_2)
-    if final_book_2_data:
-        logger.info(f"Książka '{final_book_2_data.get('title')}' (hash: {temp_test_book_hash_2}) znaleziona w DB.")
-        if "scans" in final_book_2_data and len(final_book_2_data['scans']) == 1: # Oczekujemy w0001
-            logger.info(f"  Liczba skanów dla '{final_book_2_data.get('title')}': {len(final_book_2_data['scans'])}")
-            w0001_path = config.PROCESSED_DIR / temp_test_book_hash_2 / f"{temp_test_book_hash_2}_w0001.tif"
-            if w0001_path.exists():
-                logger.info("  Plik skanu w processed/ istnieje.")
-                logger.info("TEST SCANNER: Sukces - przetworzono 'InnaKsiazka'.")
-            else:
-                logger.error("TEST SCANNER: Błąd - brakuje przetworzonego pliku w processed/ dla InnaKsiazka.")
-        else:
-            logger.error("TEST SCANNER: Błąd - nie przetworzono skanu lub liczba skanów niepoprawna dla InnaKsiazka.")
-    else:
-        logger.error("TEST SCANNER: Błąd - książka 'InnaKsiazka' nie została znaleziona w DB po przetworzeniu.")
-
-
-    logger.info("\n--- Końcowe czyszczenie danych testowych ---")
-    try:
-        if db_manager.books_collection:
-            db_manager.books_collection.delete_many({"book_hash": {"$in": [temp_test_book_hash_1, temp_test_book_hash_2]}})
-            logger.info("Usunięto wszystkie książki testowe z DB.")
-        
-        for h in [temp_test_book_hash_1, temp_test_book_hash_2]:
-            folder = config.PROCESSED_DIR / h
-            if folder.exists():
-                shutil.rmtree(folder)
-                logger.info(f"Usunięto folder processed/: {folder}")
-        
-        for f in test_scan_dir.iterdir(): # Upewnij się, że scans/ jest czysty
-            if f.is_file():
-                f.unlink()
-                logger.info(f"Usunięto plik z scans/: {f.name}")
-        
-    except Exception as e:
-        logger.error(f"Błąd podczas końcowego czyszczenia: {e}")
-        
     db_manager.close()
     logger.info("\n--- Testowanie Modułu Scanner zakończone ---")
