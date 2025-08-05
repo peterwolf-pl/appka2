@@ -205,21 +205,23 @@ class Scanner:
 
             # Krok 3: Wykonanie OCR i zapis tekstu do pliku .txt
             ocr_text = ""
-            # Wykonujemy OCR tylko dla typów stron, które mają tekst
-            if parsed_scan_info["page_type_full"] in ["Wstęp", "Strona Główna"]: 
-                if self.ocr_engine.is_available():
+            if self.ocr_engine.is_available():
+                try:
                     ocr_text = self.ocr_engine.perform_ocr(destination_path, lang=config.DEFAULT_OCR_LANG)
                     ocr_txt_path = destination_path.with_suffix(".txt")
-                    try:
-                        with open(ocr_txt_path, "w", encoding="utf-8") as f:
-                            f.write(ocr_text)
-                        logger.info(f"Scanner: Zapisano tekst OCR do: {ocr_txt_path.relative_to(config.BASE_DIR)}")
-                    except Exception as e:
-                        logger.error(f"Scanner: Błąd zapisu pliku OCR dla {destination_path.name}: {e}")
-                else:
-                    logger.warning("Scanner: Silnik OCR niedostępny. Pomijam OCR dla pliku '{scan_path.name}'.")
+                    with open(ocr_txt_path, "w", encoding="utf-8") as f:
+                        f.write(ocr_text)
+                    logger.info(
+                        f"Scanner: Zapisano tekst OCR do: {ocr_txt_path.relative_to(config.BASE_DIR)}"
+                    )
+                except Exception as e:
+                    logger.error(
+                        f"Scanner: Błąd przetwarzania OCR dla {destination_path.name}: {e}"
+                    )
             else:
-                logger.info(f"Scanner: Typ strony '{parsed_scan_info['page_type_full']}' ({scan_path.name}) - pomijam OCR.")
+                logger.warning(
+                    f"Scanner: Silnik OCR niedostępny. Pomijam OCR dla pliku '{scan_path.name}'."
+                )
 
             # Krok 4: Przygotowanie danych skanu i zapis do DB/JSON
             scan_data_for_db = {
@@ -297,6 +299,15 @@ if __name__ == "__main__":
             logger.info("Znalezione pliki w folderze scans/:")
             for f in files:
                 logger.info(f"  - {f.name}")
+                if ocr_engine.is_available():
+                    try:
+                        preview_text = ocr_engine.perform_ocr(
+                            f, lang=config.DEFAULT_OCR_LANG
+                        )
+                        preview = preview_text[:80].replace("\n", " ")
+                        logger.info(f"    OCR (pierwsze 80 znaków): {preview}")
+                    except Exception as e:
+                        logger.error(f"Błąd OCR pliku {f.name}: {e}")
         else:
             logger.info("Brak plików w folderze scans/ do analizy.")
     except Exception as e:
