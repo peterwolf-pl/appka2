@@ -241,10 +241,29 @@ class Scanner:
                 current_book_data_from_db = self.db_manager.get_book_by_hash(current_book_hash)
                 if current_book_data_from_db:
                     self.db_manager.save_local_metadata_json(
-                        current_book_hash, 
-                        current_book_data_from_db, 
+                        current_book_hash,
+                        current_book_data_from_db,
                         scan_data_for_db # Tutaj scan_data_for_db jest już poprawnie przygotowany
                     )
+                    # Po zapisaniu metadanych uruchom dodatkowe moduły analizy
+                    try:
+                        # Przykładowa operacja na tekście OCR z wykorzystaniem utils
+                        normalized_ocr = utils.remove_diacritics(ocr_text)
+                        logger.debug(
+                            f"Utils: oczyszczony fragment OCR: {normalized_ocr[:80].replace('\n', ' ')}"
+                        )
+
+                        # Analiza dat i miejsc przy użyciu DataSplitter z data_ripper
+                        from app.data_ripper import DateSplitter
+                        splitter = DateSplitter(book_folder / "metadata.json")
+                        timeline_events = splitter.extract_dates_and_places()
+                        logger.info(
+                            f"DataRipper: Wykryto {len(timeline_events)} wydarzeń w książce {current_book_hash}."
+                        )
+                    except Exception as e:
+                        logger.error(
+                            f"Scanner: Błąd podczas uruchamiania utils/data_ripper dla '{destination_path.name}': {e}"
+                        )
                 else:
                     logger.error(f"Scanner: Nie można pobrać danych książki '{current_book_hash}' z bazy po upsert, aby zapisać lokalny JSON.")
 
